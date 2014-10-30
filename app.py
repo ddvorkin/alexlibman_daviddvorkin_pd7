@@ -9,8 +9,10 @@ def home():
     if request.method == "POST":
         conn = Connection()
         db = conn['login']
-        list = []
-        
+        user = request.form["username"]
+        pword = request.form["password"]
+        list = [{user:pword}]
+        db.users.insert(list)
         #validate info from text boxes
     else:
         return render_template("login.html");

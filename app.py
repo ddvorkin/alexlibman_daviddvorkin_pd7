@@ -6,9 +6,9 @@ app = Flask(__name__)
 
 @app.route("/",methods = ["POST","GET"])
 def home():
-    if request.form['b'] == "Register":
-        return redirect(url_for("register"))
     if request.method == "POST":
+        if request.form['b'] == "Register":
+            return redirect(url_for("register"))
         conn = Connection()
         db = conn['login']
         user = request.form["username"]
@@ -29,9 +29,23 @@ def register():
         db = conn['login']
         user = request.form["username"]
         pword = request.form["password"]
+        pword2 = request.form["confirm_password"]
+        name = request.form["name"]
+        if user == "":
+            msg = "Please enter a username."
+            pword2 = request.form["confirm_password"]
+        if pword == "" or pword2 == "":
+            msg = "No password entered in one or more of the fields."
+            return render_template("register.html",message=msg)
+        if pword != pword2:
+            msg = "Passwords entered do not match."
+            return render_template("register.html",message=msg)
+        if name == "":
+            msg = "Please enter your name."
+            return render_template("register.html",message=msg)
         list = [{user:pword}]
         db.users.insert(list)
-        return render_template("register.html")
+        return redirect(url_for("/"))
     else:
         return render_template("register.html")
 

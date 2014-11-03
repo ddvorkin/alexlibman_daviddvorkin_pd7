@@ -49,9 +49,17 @@ def register():
     else:
         return render_template("register.html")
 
-@app.route("/mainpage", methods = ["POST", "GET"])
-def information():
-    pass
+#@app.route("/mainpage", methods = ["POST", "GET"])
+#def inform():
+#    if request.method == "POST":
+#        conn = Connection()
+#        db = conn['login']
+#        list = [{user:pword}]
+#        db.users.insert(list)
+#        return redirect(url_for("/"))
+#    else:
+#        return render_template("mainpage.html")
+#FIX
 
 if __name__=="__main__":
     app.debug = True

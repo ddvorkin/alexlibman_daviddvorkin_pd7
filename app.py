@@ -19,6 +19,10 @@ def home():
 def register():
     pass
 
+@app.route("/mainpage", methods = ["POST", "GET"])
+def information():
+    pass
+
 if __name__=="__main__":
     app.debug = True
     app.run()

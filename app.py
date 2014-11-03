@@ -5,6 +5,7 @@ from pymongo import Connection
 app = Flask(__name__)
 
 @app.route("/",methods = ["POST","GET"])
+@app.route("/home",methods = ["POST","GET"])
 def home():
     if request.method == "POST":
         if request.form['b'] == "Register":
@@ -34,6 +35,9 @@ def register():
         if user == "":
             msg = "Please enter a username."
             return render_template("register.html",message=msg)
+        if db.users.find({user}).next():
+            msg = "The username entered is already registered."
+            return render_template("register.html",message=msg)
         if pword == "" or pword2 == "":
             msg = "No password entered in one or more of the fields."
             return render_template("register.html",message=msg)
@@ -43,9 +47,11 @@ def register():
         if name == "":
             msg = "Please enter your name."
             return render_template("register.html",message=msg)
-        list = [{user:pword}]
+        list = [{"user":user,"password":pword,"name":name}]
         db.users.insert(list)
-        return redirect(url_for("/"))
+        for r in db.users.find({},{'_id':False}):
+            print r
+        return redirect(url_for("home"))
     else:
         return render_template("register.html")
 

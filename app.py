@@ -33,7 +33,7 @@ def register():
         name = request.form["name"]
         if user == "":
             msg = "Please enter a username."
-            pword2 = request.form["confirm_password"]
+            return render_template("register.html",message=msg)
         if pword == "" or pword2 == "":
             msg = "No password entered in one or more of the fields."
             return render_template("register.html",message=msg)

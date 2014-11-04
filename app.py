@@ -35,7 +35,7 @@ def register():
         if user == "":
             msg = "Please enter a username."
             return render_template("register.html",message=msg)
-        if db.users.find({user}).next():
+        if next(db.users.find({"user":user}),None) != None:
             msg = "The username entered is already registered."
             return render_template("register.html",message=msg)
         if pword == "" or pword2 == "":
@@ -45,7 +45,7 @@ def register():
             msg = "Passwords entered do not match."
             return render_template("register.html",message=msg)
         if name == "":
-            msg = "Please enter your name."
+            msg = "No name entered."
             return render_template("register.html",message=msg)
         list = [{"user":user,"password":pword,"name":name}]
         db.users.insert(list)

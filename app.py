@@ -55,6 +55,19 @@ def inform():
     else:
         return render_template("text.html",message="You must be logged in to view this page.")
 
+@app.route("/page")
+def page():
+    if request.method == "POST" and request.form['b'] == "Logout":
+        return logout()
+    if "user" in session:
+        return render_template("page.html")
+    else:
+        return render_template("text.html",message="You must be logged in to view this page.")
+
+@app.route("/about")
+def about():
+    return render_template("about.html")
+
 def logout():
     session.pop("user",None)
     return redirect(url_for("home"))

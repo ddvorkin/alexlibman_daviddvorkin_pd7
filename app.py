@@ -10,6 +10,8 @@ def home():
     if request.method == "POST":
         if request.form['b'] == "Register":
             return redirect(url_for("register"))
+        if request.form['b'] == "Logout":
+            return logout()
         user = request.form["username"]
         pword = request.form["password"]
         msg = login.login(user,pword)
@@ -20,11 +22,15 @@ def home():
         else:
             return render_template("login.html",message=msg)
     else:
+        if "user" in session:
+            return render_template("textwithlogout.html",message="You are already logged in.")
         return render_template("login.html")
 
 @app.route("/register",methods = ["POST","GET"])
 def register():
     if request.method == "POST":
+        if request.form['b'] == "Logout":
+            return logout()
         user = request.form["username"]
         pword = request.form["password"]
         pword2 = request.form["confirm_password"]
@@ -35,15 +41,23 @@ def register():
         else:
             return render_template("register.html",message=msg)
     else:
+        if "user" in session:
+            return render_template("textwithlogout.html",message="You are already logged in.")
         return render_template("register.html")
 
-@app.route("/mainpage")
+@app.route("/mainpage",methods = ["POST","GET"])
 def inform():
+    if request.method == "POST" and request.form['b'] == "Logout":
+        return logout()
     if "user" in session:
         info = login.getinfo(session["user"])#dict which includes "user" and "name"
         return render_template("mainpage.html",info=info)
     else:
-        return render_template("mainpage.html",msg="You must be logged in to view the contents of this page.") #???
+        return render_template("text.html",message="You must be logged in to view this page.")
+
+def logout():
+    session.pop("user",None)
+    return redirect(url_for("home"))
 
 if __name__=="__main__":
     app.debug = True
